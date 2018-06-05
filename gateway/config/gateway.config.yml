@@ -1,0 +1,35 @@
+http:
+  port: 8080
+apiEndpoints:
+  msaread:
+    host: ''
+    paths: /api/read
+  msawrite:
+    host: '*'
+    paths: /api/write
+serviceEndpoints:
+  msaread:
+    url: 'http://msaread:3001'
+  msawrite:
+    url: 'http://msawrite:3000'
+policies:
+  - proxy
+pipelines:
+  msaread:
+    apiEndpoints:
+      - msaread
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: msaread
+              changeOrigin: true
+              ignorePath: true
+  msawrite:
+    apiEndpoints:
+      - msawrite
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: msawrite
+              changeOrigin: true
+              ignorePath: true
